@@ -23,7 +23,6 @@ private:
 
 
 TEST(DeviceDriverTestRead, 200ms_단위로_Read를_5회_수행) {
-	// 5회 함수가 호출 되어야 PASS야
 	MockFlashMemoryDevice mfd;
 	DeviceDriver dd(&mfd);
 
@@ -33,10 +32,33 @@ TEST(DeviceDriverTestRead, 200ms_단위로_Read를_5회_수행) {
 }
 
 TEST(DeviceDriverTestRead, 5회의_Read의_결과가_모두_같은_값일_때,_읽은_값을_return) {
-	// 5회의 Read의 결과가 모두 같은 값일 때, 읽은 값을 return 한다.
-	// 모두 같은 값이 아니라면, Custom Exception(ReadFailException)을 발생
+	MockFlashMemoryDevice mfd;
+	DeviceDriver dd(&mfd);
 
+	EXPECT_CALL(mfd, read(0xA))
+		.WillOnce(Return(0xB))
+		.WillOnce(Return(0xB))
+		.WillOnce(Return(0xB))
+		.WillOnce(Return(0xB))
+		.WillOnce(Return(0xB));
+
+	EXPECT_EQ(dd.read(0xA), 0xB);
 }
+
+TEST(DeviceDriverTestRead, 5회의_Read의_결과가_모두_같은_값일_때_읽은_값을_return) {
+	MockFlashMemoryDevice mfd;
+	DeviceDriver dd(&mfd);
+
+	EXPECT_CALL(mfd, read(0xA))
+		.WillOnce(Return(0xB))
+		.WillOnce(Return(0xB))
+		.WillOnce(Return(0xB))
+		.WillOnce(Return(0xB))
+		.WillOnce(Return(0xC));
+
+	EXPECT_THROW(dd.read(0xA), std::exception);
+}
+
 
 
 int main() {
