@@ -1,4 +1,4 @@
-#include"gmock/gmock.h"
+ï»¿#include"gmock/gmock.h"
 #include "DeviceDriver.h"
 #include "FlashMemoryDevice.h"
 
@@ -22,7 +22,7 @@ private:
 };
 
 
-TEST(DeviceDriverTestRead, 200ms_´ÜÀ§·Î_Read¸¦_5È¸_¼öÇà) {
+TEST(DeviceDriverTestRead, 200ms_ë‹¨ìœ„ë¡œ_Readë¥¼_5íšŒ_ìˆ˜í–‰) {
 	MockFlashMemoryDevice mfd;
 	DeviceDriver dd(&mfd);
 
@@ -31,7 +31,7 @@ TEST(DeviceDriverTestRead, 200ms_´ÜÀ§·Î_Read¸¦_5È¸_¼öÇà) {
 	dd.read(0xA);
 }
 
-TEST(DeviceDriverTestRead, 5È¸ÀÇ_ReadÀÇ_°á°ú°¡_¸ğµÎ_°°Àº_°ªÀÏ_¶§,_ÀĞÀº_°ªÀ»_return) {
+TEST(DeviceDriverTestRead, 5íšŒì˜_Readì˜_ê²°ê³¼ê°€_ëª¨ë‘_ê°™ì€_ê°’ì¼_ë•Œ,_ì½ì€_ê°’ì„_return) {
 	MockFlashMemoryDevice mfd;
 	DeviceDriver dd(&mfd);
 
@@ -45,7 +45,7 @@ TEST(DeviceDriverTestRead, 5È¸ÀÇ_ReadÀÇ_°á°ú°¡_¸ğµÎ_°°Àº_°ªÀÏ_¶§,_ÀĞÀº_°ªÀ»_retu
 	EXPECT_EQ(dd.read(0xA), 0xB);
 }
 
-TEST(DeviceDriverTestRead, 5È¸ÀÇ_ReadÀÇ_°á°ú°¡_¸ğµÎ_°°Àº_°ªÀÏ_¶§_ÀĞÀº_°ªÀ»_return) {
+TEST(DeviceDriverTestRead, 5íšŒì˜_Readì˜_ê²°ê³¼ê°€_ëª¨ë‘_ê°™ì€_ê°’ì¼_ë•Œ_ì½ì€_ê°’ì„_return) {
 	MockFlashMemoryDevice mfd;
 	DeviceDriver dd(&mfd);
 
@@ -60,6 +60,19 @@ TEST(DeviceDriverTestRead, 5È¸ÀÇ_ReadÀÇ_°á°ú°¡_¸ğµÎ_°°Àº_°ªÀÏ_¶§_ÀĞÀº_°ªÀ»_retur
 }
 
 
+TEST(DeviceDriverTestWrite, í•´ë‹¹_ê°ì²´ì—_ì´ë¯¸_ê°’ì´_ì í˜€_ìˆëŠ”ì§€_í™•ì¸) {
+	//(ì½ì—ˆì„ ë•Œ 0xFFë¼ë©´, ê°’ì´ ì§€ì›Œì§„ ìƒíƒœì´ë‹¤.)
+	MockFlashMemoryDevice mfd;
+	DeviceDriver dd(&mfd);
+
+	EXPECT_CALL(mfd, read(0xA))
+		.WillOnce(Return(0xFF));
+
+	EXPECT_THROW(dd.write(0xA, 3), std::exception);
+}
+
+//ê°’ì´ ì í˜€ ìˆì§€ ì•Šì„ ë•Œ, í•´ë‹¹ ì£¼ì†Œì— ê°’ì„ Writeí•œë‹¤.
+//â€¢ ì´ë¯¸ ê°’ì´ ì í˜€ ìˆë‹¤ë©´ Custom Exception(WriteFailException)ì„ ë°œìƒì‹œí‚¨ë‹¤.
 
 int main() {
 	testing::InitGoogleMock();
