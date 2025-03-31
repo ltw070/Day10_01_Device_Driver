@@ -40,7 +40,7 @@ public:
 void DeviceDriver::write(long address, int data)
 {
 	// TODO: implement this method
-	if (m_hardware->read(address) == 0xFF) {
+	if (m_hardware->read(address) != 0xFF) {
 		throw WriteFailException();
 		return;
 	}
